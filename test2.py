@@ -11,6 +11,11 @@ def get_bpm():
         if i != "":
             return i
     
+def get_pressure():
+    values = []
+    for i in m:
+        if i != "":
+            values.append(i)
 session = Session()
 
 bpm = get_bpm()
@@ -24,7 +29,7 @@ elif bpm < 70:
     bpm = 30
 
 piano1 = session.new_part("Piano")
-piano2 = session.new_part("Piano")
+piano2 = session.new_part("Guitar")
 
 pitches = [64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73]
 
