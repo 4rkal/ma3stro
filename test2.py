@@ -42,6 +42,14 @@ piano2 = session.new_part("Guitar")
 
 pitches = get_pressure()
 pitches.append(bpm)
+for pitch in pitches:
+    if pitch < 10:
+        pitch = pitch * 8
+        if pitch < 2:
+            pitch = 15
+    if pitch > 90:
+        pitch = pitch * 0.96
+print(pitches)
 # pitches = [64, 66, 71, 73, 74, 66, 64, 73, 71, 66, 74, 73]
 
 
