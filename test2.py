@@ -20,7 +20,7 @@ def get_pressure():
             i = i /100
             values.append(i)
             count += 1
-        if count >= 20:
+        if count >= 10:
             return values
 
 session = Session()
