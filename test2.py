@@ -2,33 +2,70 @@ from pydub import AudioSegment
 import numpy as np
 import soundfile as sf
 from scamp import *
-from microserial import Microbit
+import time
+import serial
 
-m=Microbit()
+ser = serial.Serial('COM26', 115200, timeout=0)
 
 def get_bpm():
     for i in m:
         if i != "":
-            return i
-    
+            print(i)
+            while True:
+                if int(i) < 120 and int(i) > 0:
+                    print(i)
+                    return i
+import time  # Importing the time module for the sleep function
+
 def get_pressure():
     count = 0
     values = []
     for i in m:
         if i != "":
-            i = int(i)
-            i = i /100
-            values.append(i)
-            count += 1
-        if count >= 10:
-            return values
+            try:
+                i = int(i)  # Convert i to an integer
+            except ValueError:
+                # Handle the case where i cannot be converted to an integer
+                continue
+            while True:
+                if i > 120:
+                    i /= 100  # Convert i to the appropriate pressure value
+                    values.append(i)
+                    count += 1
+                    time.sleep(0.1)
+                if count >= 10:
+                    return values
 
+def get_stuff():
+    values = []
+    count = 0
+    data = ser.readline().strip()
+    while True:
+        if data and b':' in data:
+            name,value = data.decode().split(':')
+            if value:
+                try:
+                    if name == 'pressure':
+                        pressure = int(value)
+                        print('Presure', pressure)
+                        count += 1
+
+                    elif name == 'heart':
+                        heart = int(value)
+                        tempo = heart
+                        count+= 1
+                        values.append(heart)
+                        break
+                    elif count == 21:
+                        return tempo, values
+
+                except ValueError:
+                    print('error')
+                    countinue
+    time.sleep(0.1)
 session = Session()
 
-bpm = get_bpm()
-bpm = int(bpm)
-bpm = 77
-print(bpm)
+bpm , pitches = get_stuff()
 
 if bpm > 90:
     bpm = 120
@@ -39,9 +76,6 @@ elif bpm < 70:
 piano1 = session.new_part("Piano")
 piano2 = session.new_part("Guitar")
 
-
-pitches = get_pressure()
-pitches.append(bpm)
 for pitch in pitches:
     if pitch < 10:
         pitch = pitch * 8

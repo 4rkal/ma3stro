@@ -10,7 +10,7 @@ if __name__ == "__main__":
     script2_thread = threading.Thread(target=run_script, args=("record.py",))
 
     script1_thread.start()
-    time.sleep(8)
+    time.sleep(1)
     script2_thread.start()
 
     script1_thread.join()
