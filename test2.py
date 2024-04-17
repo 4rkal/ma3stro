@@ -63,6 +63,7 @@ def get_stuff():
                     print('error')
                     countinue
     time.sleep(0.1)
+    
 session = Session()
 
 bpm , pitches = get_stuff()
